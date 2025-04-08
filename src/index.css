@@ -1,0 +1,618 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.all-content {
+  display: grid;
+  height: 100vh;
+  width: 100vw;
+  justify-items: center;
+  position: relative;
+}
+.top-area {
+  height: 10vh;
+  width: 92vw;
+  display: flex;
+  transform: skew(-20deg);
+  background-color: #0096ff;
+  border: #0096ff solid 1px;
+  gap: 1vw;
+  position: relative;
+  z-index: 7;
+}
+
+.night-bg {
+  background-color: rgb(35, 33, 33);
+}
+.day-bg {
+  background-color: #0f52ba;
+}
+.night-data {
+  background-color: #0f52ba;
+  color: lightgray;
+}
+.day-data {
+  background-color: #0096ff;
+}
+
+h2 {
+  color: lightgray;
+  font-style: italic;
+  font-size: 130%;
+}
+
+.title {
+  transform: skew(20deg);
+}
+.logo {
+  transform: skew(20deg);
+}
+.title-logo {
+  background-color: #0f52ba;
+  display: flex;
+  gap: 1vw;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 20%;
+}
+
+.search {
+  display: grid;
+  justify-content: center;
+  transform: skew(20deg);
+  margin-left: 35vw;
+}
+.input {
+  width: 30vw;
+  height: 4vh;
+  border: lightgray solid 2px;
+  background-color: lightgray;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 2.3vh;
+}
+.units,
+.to-from {
+  width: 50%;
+  height: 4.5vh;
+  border: lightgray solid 2px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 90%;
+  margin-top: -1vh;
+  margin-bottom: 1vh;
+  background-color: lightgray;
+}
+
+.dropdown {
+  background-color: #0096ff;
+  width: 100%;
+  display: grid;
+  row-gap: 1vh;
+  margin-top: 3%;
+  height: 23vh;
+}
+.option {
+  width: 100%;
+  color: black;
+  font-size: 120%;
+  height: 3vh;
+}
+.option:hover {
+  cursor: pointer;
+  background-color: lightgray;
+}
+
+.times {
+  display: flex;
+  gap: 1vw;
+  height: 23vh;
+  width: 95vw;
+  margin-top: 3vh;
+  justify-content: flex-start;
+  margin: auto;
+  overflow: auto;
+}
+
+.city-data {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  height: 85%;
+  width: 16vw;
+  min-width: 200px;
+  border: #0096ff solid 2px;
+  border-radius: 15px;
+  position: relative;
+  row-gap: 4%;
+  padding: 0.5% 0.5%;
+  margin: 0 1vw;
+  overflow: hidden;
+}
+.active-city {
+  border: lightgray solid 3px;
+  padding: 0.3% 0.3%;
+}
+
+.city-data:hover {
+  cursor: pointer;
+}
+.loading {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  height: 88%;
+  width: 16vw;
+  min-width: 220px;
+  font-size: 18px;
+  border: #0096ff solid 2px;
+  border-radius: 15px;
+  position: relative;
+}
+.city-name {
+  margin-top: 2%;
+  font-size: 85%;
+  z-index: 2;
+}
+.current-condition-desc {
+  margin-top: -1.5%;
+  font-size: 75%;
+  z-index: 2;
+}
+.aqi-current {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  z-index: 3;
+  border-left: 100px;
+  border-top: 100px;
+  height: 20px;
+  width: 44px;
+  border-radius: 0 0 15px 0;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  font-size: 63%;
+}
+.remove {
+  color: red;
+  position: absolute;
+  top: 3%;
+  right: 5%;
+  font-size: 120%;
+}
+
+.remove:hover {
+  cursor: pointer;
+}
+.clock-weather {
+  margin-top: -0.5vh;
+  display: flex;
+  align-items: center;
+}
+.clock {
+  position: relative;
+  height: 56px;
+  width: 56px;
+  background-size: 100%;
+  border-radius: 50%;
+  border: rgb(57, 54, 54) solid 4px;
+  background: linear-gradient(-45deg, #050606, #7c8c8f);
+  margin-right: 1vw;
+}
+.hour,
+.minute,
+.second,
+.dot {
+  position: absolute;
+  border-radius: 10px;
+  transform-origin: bottom;
+}
+
+.hour {
+  width: 7%;
+  height: 30%;
+  top: 19%;
+  left: 46%;
+  background-color: yellow;
+}
+
+.minute {
+  width: 6%;
+  height: 40%;
+  top: 8.5%;
+  left: 45.5%;
+  background: rgb(18, 231, 18);
+}
+
+.second {
+  width: 4%;
+  height: 46%;
+  top: 6.6%;
+  left: 47%;
+  background-color: red;
+  animation-name: spin;
+}
+.dot {
+  background-color: green;
+  border-radius: 50%;
+  left: 43%;
+  top: 44%;
+  width: 13%;
+  height: 13%;
+}
+.weather {
+  font-size: 90%;
+  display: flex;
+  gap: 0.3vw;
+}
+
+.digital-clock {
+  font-size: 90%;
+}
+
+.times-map {
+  display: grid;
+  width: 95vw;
+  height: 90vh;
+  justify-items: center;
+}
+
+.map-weather {
+  display: flex;
+  gap: 3vw;
+  justify-content: center;
+}
+.map-container {
+  height: 50vh;
+  width: 34vw;
+  border: #0f52ba solid 2px;
+  border-radius: 15px;
+  background-color: rgb(35, 33, 33);
+  margin-top: 3vh;
+  z-index: 1;
+}
+.popup {
+  color: black;
+}
+.pin-marker {
+  background-image: url("/icons/pin.png");
+  background-size: cover;
+  width: 22px;
+  height: 22px;
+}
+
+.daily-hourly-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5vw;
+  align-self: start;
+  margin-top: 2vh;
+}
+
+.daily-button,
+.hourly-button {
+  display: grid;
+  --background-color: #0f52ba;
+  --background-color-dark: #042049;
+  width: 13vw;
+  height: 4.3vh;
+  background-color: var(--background-color);
+  box-shadow: 6px 6px 0 var(--background-color-dark);
+  border: #0096ff solid 1px;
+  color: lightgray;
+  border-radius: 20px;
+  justify-items: center;
+  align-items: center;
+  font-size: 85%;
+}
+
+.active-day-hour {
+  transform: translateX(2px) translateY(2px);
+  border: lightgray solid 3px;
+  background-color: var(--background-color);
+  box-shadow: 3px 3px 0 var(--background-color-dark);
+}
+
+.weather-info {
+  display: grid;
+  height: 50vh;
+  width: 56vw;
+  border: #0096ff solid 2px;
+  border-radius: 15px;
+  justify-items: center;
+  align-items: center;
+  margin-top: 3vh;
+  z-index: 1;
+}
+
+.weather-city {
+  justify-self: start;
+  align-self: start;
+  margin-left: 2vw;
+  font-size: 120%;
+  margin-top: -8vh;
+  position: relative;
+  z-index: 2;
+}
+
+.forecast {
+  display: flex;
+  width: 93%;
+  justify-content: flex-start;
+  overflow: auto;
+  margin-top: -22vh;
+}
+
+.forecast-box {
+  display: grid;
+  width: 150px;
+  height: 24.4vh;
+  justify-items: center;
+  align-items: center;
+  padding-right: 0.3vw;
+  font-size: 108%;
+}
+.icon-hum {
+  display: flex;
+  gap: 0.7vw;
+}
+.humidity {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  align-self: flex-start;
+  margin-top: -0.5vh;
+}
+.precip {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  font-size: 70%;
+  margin-top: 3px;
+  margin-bottom: 6px;
+}
+
+.wind-info {
+  display: flex;
+  gap: 0.5vw;
+  align-items: center;
+  justify-content: center;
+}
+.spin {
+  animation-name: spin;
+  animation-duration: 12s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.partly-cloudy-overlap {
+  position: relative;
+}
+.overlap-cloud {
+  z-index: 2;
+  position: absolute;
+  left: 20%;
+  top: 25%;
+}
+
+.overlap-cloud-precip {
+  z-index: 2;
+  position: absolute;
+  left: 20%;
+  top: 34%;
+}
+
+.loading-icon {
+  animation-name: spin;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.settings {
+  position: fixed;
+  z-index: 6;
+  top: 30vh;
+  left: 37.5vw;
+  width: 30vw;
+  height: 30vh;
+  font-size: 100%;
+  display: grid;
+  border: solid 2px rgb(35, 33, 33);
+  justify-items: center;
+  align-items: center;
+  border-radius: 25px;
+  padding: 5px 5px;
+}
+@media (orientation: portrait), (max-width: 950px) {
+  .top-area {
+    height: 8vh;
+  }
+  .dropdown {
+    display: grid;
+    row-gap: 1vh;
+    margin-top: 3%;
+    height: 23vh;
+  }
+
+  .search {
+    margin-left: 20vw;
+  }
+  .input {
+    width: 40vw;
+    height: 3vh;
+    text-align: center;
+    margin-top: 2.2vh;
+  }
+  .title {
+    font-size: 0;
+  }
+  .times {
+    height: 20vh;
+  }
+  .city-data,
+  .loading {
+    min-height: 110px;
+  }
+  .weather {
+    font-size: 85%;
+  }
+
+  .city-name {
+    font-size: 76%;
+  }
+  .remove {
+    font-size: 72%;
+    top: 2%;
+  }
+
+  .digital-clock {
+    font-size: 80%;
+  }
+  .clock {
+    margin-right: 2.5vw;
+  }
+
+  .hourly-button,
+  .daily-button {
+    width: 20vw;
+    height: 4.5vh;
+    font-size: 85%;
+    overflow: auto;
+    margin-right: 2vw;
+  }
+
+  .weather-info {
+    height: 50vh;
+    width: 92vw;
+    border: #0f52ba solid 2px;
+    border-radius: 15px;
+    margin-top: 0vh;
+  }
+  .map-container {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .settings {
+    left: 4vw;
+    width: 90vw;
+  }
+}
+@media (max-width: 700px) and (orientation: landscape) {
+  .icon {
+    height: 38px;
+    width: 38px;
+    margin-right: -13%;
+  }
+  .spin {
+    margin-right: -13%;
+  }
+}
+@media (min-width: 1250px) {
+  .times {
+    height: 23vh;
+    justify-content: center;
+    overflow-x: unset;
+  }
+  .city-data,
+  .loading {
+    height: 85%;
+    min-height: 120px;
+    z-index: 0;
+  }
+}
+
+.footer {
+  position: absolute;
+  top: 96.5vh;
+  left: 1vw;
+  font-size: 12px;
+  margin-bottom: 2vh;
+  color: lightgray;
+  z-index: 0;
+}
+
+.a {
+  text-decoration: none;
+  color: lightgray;
+}
+
+.a-night,
+.a-night:visited {
+  text-decoration: none;
+  color: lightgray;
+}
+.a-day,
+.a-day:visited {
+  text-decoration: none;
+  color: black;
+}
+
+.credits {
+  position: fixed;
+  z-index: 6;
+  top: 30vh;
+  left: 30vw;
+  width: 40vw;
+  height: 30vh;
+  font-size: 12px;
+  display: grid;
+  border: solid 3px rgb(35, 33, 33);
+  justify-items: center;
+  align-items: center;
+  border-radius: 25px;
+  padding: 5px 5px;
+}
+
+.night-schedule {
+  display: flex;
+  gap: 1vw;
+  width: 80%;
+  align-items: center;
+  justify-content: center;
+  margin-top: -3vh;
+}
+.mode-from,
+.mode-to {
+  background-color: lightgray;
+  border-radius: 15px;
+  border: rgb(35, 33, 33) solid 2px;
+  height: 4vh;
+  width: 50%;
+  text-align: center;
+}
+.settings-btn {
+  align-self: center;
+  transform: skew(20deg);
+  margin-left: 2.1vw;
+}
+.credit-btn {
+  font-size: 12px;
+  border-radius: 15px;
+  border: #0096ff solid 1px;
+  color: lightgray;
+  background-color: green;
+}
+.credit-btn:hover,
+.settings-btn:hover {
+  cursor: pointer;
+}

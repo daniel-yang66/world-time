@@ -1,0 +1,72 @@
+import { useState } from "react";
+import Option from "./option";
+export default function Search({
+  onSetSelection,
+  dropdownClose,
+  favorites,
+  onSetFavorites,
+}) {
+  const [options, setOptions] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+
+  const fetchResults = async function (text) {
+    const fetchedData = await fetch(
+      `https://api.mapbox.com/search/geocode/v6/forward?q=${text}&types=place,district,neighborhood&language=en&access_token=${
+        import.meta.env.VITE_TOKEN
+      }`
+    );
+
+    const results = await fetchedData.json();
+
+    let places = [];
+
+    results["features"].forEach((location) => {
+      places.push(
+        `${location["properties"]["name_preferred"]}, ${
+          location["properties"]["context"]["country"][
+            "country_code_alpha_3"
+          ] === "USA"
+            ? location["properties"]["context"]["region"]["region_code"]
+            : location["properties"]["context"]["country"]["country_code"]
+        } | ${location["geometry"]["coordinates"][1]},${
+          location["geometry"]["coordinates"][0]
+        }`
+      );
+    });
+
+    setOptions(places);
+  };
+
+  return (
+    <div className="search">
+      <input
+        className="input"
+        type="text"
+        placeholder="Location Search"
+        onChange={(e) => {
+          fetchResults(e.target.value);
+          setInputValue(e.target.value);
+        }}
+        value={inputValue}
+      ></input>
+      <div
+        className={
+          dropdownClose === true || options.length === 0 ? "hidden" : "dropdown"
+        }
+      >
+        {options.map((opt) => {
+          return (
+            <Option
+              loc={opt}
+              favesList={favorites}
+              onSetFavesList={onSetFavorites}
+              key={opt}
+              onSetSelection={onSetSelection}
+              onSetInputValue={setInputValue}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
