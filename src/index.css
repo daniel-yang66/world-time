@@ -239,7 +239,7 @@ h2 {
   height: 40%;
   top: 8.5%;
   left: 45.5%;
-  background: rgb(18, 231, 18);
+  background: yellow;
 }
 
 .second {
@@ -251,7 +251,7 @@ h2 {
   animation-name: spin;
 }
 .dot {
-  background-color: green;
+  background-color: orange;
   border-radius: 50%;
   left: 43%;
   top: 44%;
@@ -549,6 +549,9 @@ h2 {
   margin-bottom: 2vh;
   color: lightgray;
   z-index: 0;
+  width: 100%;
+  display: flex;
+  column-gap: 4px;
 }
 
 .a {
@@ -607,10 +610,8 @@ h2 {
 }
 .credit-btn {
   font-size: 12px;
-  border-radius: 15px;
-  border: #0096ff solid 1px;
   color: lightgray;
-  background-color: green;
+  width: 70px;
 }
 .credit-btn:hover,
 .settings-btn:hover {

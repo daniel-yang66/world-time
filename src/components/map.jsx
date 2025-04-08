@@ -1,5 +1,6 @@
 import { useEffect, memo, useRef } from "react";
 import mapboxgl from "mapbox-gl";
+import GeoJSONTerminator from "@webgeodatavore/geojson.terminator";
 
 export default memo(function Map({ faveList, active }) {
   mapboxgl.accessToken = import.meta.env.VITE_TOKEN;
@@ -37,6 +38,23 @@ export default memo(function Map({ faveList, active }) {
       style: `mapbox://styles/mapbox/satellite-streets-v12`,
       center: [-98, 39],
       zoom: 1,
+    });
+    map.current.on("load", () => {
+      const geoJSON = new GeoJSONTerminator();
+
+      map.current.addLayer({
+        id: "daynight",
+        type: "fill",
+        source: {
+          type: "geojson",
+          data: geoJSON,
+        },
+        layout: {},
+        paint: {
+          "fill-color": "#000",
+          "fill-opacity": 0.6,
+        },
+      });
     });
 
     faveList.forEach((fave) => {

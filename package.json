@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@webgeodatavore/geojson.terminator": "^1.0.2",
     "dayjs": "^1.11.13",
     "mapbox-gl": "^3.3.0",
     "react": "^18.2.0",

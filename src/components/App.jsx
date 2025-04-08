@@ -72,7 +72,9 @@ function App() {
     try {
       loadFunc("loading");
       const weatherData = await fetch(
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${lon}?key=${import.meta.env.VITE_WEATHER_KEY}&elements=%2Baqius`
+        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${lon}?key=${
+          import.meta.env.VITE_WEATHER_KEY
+        }&elements=%2Baqius`
       );
       const parsedWeatherData = await weatherData.json();
 
