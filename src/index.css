@@ -107,7 +107,6 @@ h2 {
   display: grid;
   row-gap: 1vh;
   margin-top: 3%;
-  height: 23vh;
 }
 .option {
   width: 100%;
@@ -449,7 +448,6 @@ h2 {
     display: grid;
     row-gap: 1vh;
     margin-top: 3%;
-    height: 23vh;
   }
 
   .search {

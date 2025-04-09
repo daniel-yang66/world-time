@@ -15,7 +15,8 @@
     "mapbox-gl": "^3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tz-lookup": "^6.1.25"
+    "tz-lookup": "^6.1.25",
+    "use-debounce": "^10.0.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

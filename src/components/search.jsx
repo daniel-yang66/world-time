@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Option from "./option";
+import { useDebouncedCallback } from "use-debounce";
+
 export default function Search({
   onSetSelection,
   dropdownClose,
@@ -18,10 +20,10 @@ export default function Search({
 
     const results = await fetchedData.json();
 
-    let places = [];
+    let placesTemp = [];
 
     results["features"].forEach((location) => {
-      places.push(
+      placesTemp.push(
         `${location["properties"]["name_preferred"]}, ${
           location["properties"]["context"]["country"][
             "country_code_alpha_3"
@@ -33,9 +35,24 @@ export default function Search({
         }`
       );
     });
+    if (placesTemp.length !== 0) {
+      placesTemp = placesTemp.sort();
+      let placesFinal = [placesTemp[0]];
 
-    setOptions(places);
+      let placeName = placesTemp[0];
+      placesTemp.slice(1).forEach((place, i) => {
+        if (place.split(" | ")[0] !== placeName) {
+          placesFinal.push(place);
+        }
+        placeName = place.split(" | ")[0];
+      });
+
+      setOptions(placesFinal);
+    } else {
+      setOptions([]);
+    }
   };
+  const debounce = useDebouncedCallback(fetchResults, 200);
 
   return (
     <div className="search">
@@ -44,7 +61,7 @@ export default function Search({
         type="text"
         placeholder="Location Search"
         onChange={(e) => {
-          fetchResults(e.target.value);
+          debounce(e.target.value);
           setInputValue(e.target.value);
         }}
         value={inputValue}
@@ -54,7 +71,7 @@ export default function Search({
           dropdownClose === true || options.length === 0 ? "hidden" : "dropdown"
         }
       >
-        {options.map((opt) => {
+        {[...new Set(options)].map((opt) => {
           return (
             <Option
               loc={opt}
