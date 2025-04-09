@@ -1,4 +1,4 @@
-import { useEffect, memo, useRef } from "react";
+import { useEffect, memo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import GeoJSONTerminator from "@webgeodatavore/geojson.terminator";
 
@@ -8,6 +8,8 @@ export default memo(function Map({ faveList, active }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const markers = useRef([]);
+  const [trigger, setTrigger] = useState("--");
+  const lastUpdate = useRef(Date.now());
 
   const screenWidth = window.screen.width;
 
@@ -32,6 +34,17 @@ export default memo(function Map({ faveList, active }) {
   };
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      if ((Date.now() - lastUpdate.current) / 1000 >= 1200) {
+        setTrigger((prevTrig) => !prevTrig);
+        lastUpdate.current = Date.now();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     if (screenWidth <= 600 || map.current) return;
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -39,23 +52,7 @@ export default memo(function Map({ faveList, active }) {
       center: [-98, 39],
       zoom: 1,
     });
-    map.current.on("load", () => {
-      const geoJSON = new GeoJSONTerminator();
-
-      map.current.addLayer({
-        id: "daynight",
-        type: "fill",
-        source: {
-          type: "geojson",
-          data: geoJSON,
-        },
-        layout: {},
-        paint: {
-          "fill-color": "#000",
-          "fill-opacity": 0.6,
-        },
-      });
-    });
+    map.current.on("load", () => setTrigger(true));
 
     faveList.forEach((fave) => {
       const popup = new mapboxgl.Popup({
@@ -97,6 +94,30 @@ export default memo(function Map({ faveList, active }) {
       });
     });
   }, []);
+
+  useEffect(() => {
+    if (trigger === "--") return;
+
+    if (map.current.getLayer("daynight")) {
+      map.current.removeLayer("daynight");
+      map.current.removeSource("daynight");
+    }
+    const geoJSON = new GeoJSONTerminator();
+
+    map.current.addLayer({
+      id: "daynight",
+      type: "fill",
+      source: {
+        type: "geojson",
+        data: geoJSON,
+      },
+      layout: {},
+      paint: {
+        "fill-color": "#000",
+        "fill-opacity": 0.6,
+      },
+    });
+  }, [trigger]);
 
   useEffect(() => {
     if (screenWidth >= 600) {
