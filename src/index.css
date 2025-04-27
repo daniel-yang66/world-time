@@ -29,7 +29,7 @@ body {
   height: 10vh;
   width: 92vw;
   display: flex;
-  transform: skew(-20deg);
+  transform: skew(-23deg);
   background-color: #0096ff;
   border: #0096ff solid 1px;
   gap: 1vw;
@@ -58,10 +58,10 @@ h2 {
 }
 
 .title {
-  transform: skew(20deg);
+  transform: skew(23deg);
 }
 .logo {
-  transform: skew(20deg);
+  transform: skew(23deg);
 }
 .title-logo {
   background-color: #0f52ba;
@@ -76,7 +76,7 @@ h2 {
 .search {
   display: grid;
   justify-content: center;
-  transform: skew(20deg);
+  transform: skew(23deg);
   margin-left: 35vw;
 }
 .input {
@@ -122,7 +122,7 @@ h2 {
 .times {
   display: flex;
   gap: 1vw;
-  height: 23vh;
+  height: 24vh;
   width: 95vw;
   margin-top: 3vh;
   justify-content: flex-start;
@@ -134,7 +134,7 @@ h2 {
   display: grid;
   justify-items: center;
   align-items: center;
-  height: 85%;
+  height: 92%;
   width: 16vw;
   min-width: 200px;
   border: #0096ff solid 2px;
@@ -143,7 +143,7 @@ h2 {
   row-gap: 4%;
   padding: 0.5% 0.5%;
   margin: 0 1vw;
-  overflow: hidden;
+  overflow: auto;
 }
 .active-city {
   border: lightgray solid 3px;
@@ -157,7 +157,7 @@ h2 {
   display: grid;
   justify-items: center;
   align-items: center;
-  height: 88%;
+  height: 92%;
   width: 16vw;
   min-width: 220px;
   font-size: 18px;
@@ -527,13 +527,13 @@ h2 {
 }
 @media (min-width: 1250px) {
   .times {
-    height: 23vh;
+    height: 24vh;
     justify-content: center;
     overflow-x: unset;
   }
   .city-data,
   .loading {
-    height: 85%;
+    height: 92%;
     min-height: 120px;
     z-index: 0;
   }
@@ -603,7 +603,7 @@ h2 {
 }
 .settings-btn {
   align-self: center;
-  transform: skew(20deg);
+  transform: skew(23deg);
   margin-left: 2.1vw;
 }
 .credit-btn {
@@ -614,4 +614,14 @@ h2 {
 .credit-btn:hover,
 .settings-btn:hover {
   cursor: pointer;
+}
+/* Transparent track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Customize the thumb (scroll handle) */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.5); /* semi-transparent gray */
+  border-radius: 10px;
 }

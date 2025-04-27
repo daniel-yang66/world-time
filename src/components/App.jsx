@@ -67,6 +67,7 @@ function App() {
     descFunc,
     aqiFunc,
     loadFunc,
+    windFunc,
     city
   ) => {
     try {
@@ -80,6 +81,10 @@ function App() {
 
       condFunc(`${parsedWeatherData["currentConditions"]["icon"]}`);
       tempFunc(`${Math.round(parsedWeatherData["currentConditions"]["temp"])}`);
+      windFunc([
+        Math.round(parsedWeatherData["currentConditions"]["windspeed"]),
+        Math.round(parsedWeatherData["currentConditions"]["winddirection"]),
+      ]);
       aqiFunc(`${parsedWeatherData["currentConditions"]["aqius"]}`);
       descFunc(`${parsedWeatherData["currentConditions"]["conditions"]}`);
 
@@ -169,6 +174,7 @@ function App() {
                   unit={units}
                   onFetchWeather={fetchWeather}
                   mode={mode}
+                  toFrom={toFrom}
                 />
               );
             })
