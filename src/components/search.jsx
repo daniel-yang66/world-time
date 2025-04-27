@@ -7,6 +7,7 @@ export default function Search({
   dropdownClose,
   favorites,
   onSetFavorites,
+  mode,
 }) {
   const [options, setOptions] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -68,7 +69,11 @@ export default function Search({
       ></input>
       <div
         className={
-          dropdownClose === true || options.length === 0 ? "hidden" : "dropdown"
+          dropdownClose === true || options.length === 0
+            ? "hidden"
+            : mode === "day"
+            ? "dropdown"
+            : "dropdown-night"
         }
       >
         {[...new Set(options)].map((opt) => {
@@ -80,6 +85,7 @@ export default function Search({
               key={opt}
               onSetSelection={onSetSelection}
               onSetInputValue={setInputValue}
+              mode={mode}
             />
           );
         })}

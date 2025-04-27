@@ -108,15 +108,33 @@ h2 {
   row-gap: 1vh;
   margin-top: 3%;
 }
+.dropdown-night {
+  background-color: #0f52ba;
+  width: 100%;
+  display: grid;
+  row-gap: 1vh;
+  margin-top: 3%;
+}
 .option {
   width: 100%;
   color: black;
   font-size: 120%;
   height: 3vh;
 }
+.option-night {
+  width: 100%;
+  color: lightgray;
+  font-size: 120%;
+  height: 3vh;
+}
 .option:hover {
   cursor: pointer;
   background-color: lightgray;
+}
+.option-night:hover {
+  cursor: pointer;
+  background-color: lightgray;
+  color: black;
 }
 
 .times {
@@ -134,7 +152,7 @@ h2 {
   display: grid;
   justify-items: center;
   align-items: center;
-  height: 92%;
+  height: 90%;
   width: 16vw;
   min-width: 200px;
   border: #0096ff solid 2px;
@@ -157,7 +175,7 @@ h2 {
   display: grid;
   justify-items: center;
   align-items: center;
-  height: 92%;
+  height: 90%;
   width: 16vw;
   min-width: 220px;
   font-size: 18px;
@@ -444,11 +462,6 @@ h2 {
   .top-area {
     height: 8vh;
   }
-  .dropdown {
-    display: grid;
-    row-gap: 1vh;
-    margin-top: 3%;
-  }
 
   .search {
     margin-left: 20vw;
@@ -533,7 +546,7 @@ h2 {
   }
   .city-data,
   .loading {
-    height: 92%;
+    height: 90%;
     min-height: 120px;
     z-index: 0;
   }

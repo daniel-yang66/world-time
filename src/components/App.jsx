@@ -83,7 +83,7 @@ function App() {
       tempFunc(`${Math.round(parsedWeatherData["currentConditions"]["temp"])}`);
       windFunc([
         Math.round(parsedWeatherData["currentConditions"]["windspeed"]),
-        Math.round(parsedWeatherData["currentConditions"]["winddirection"]),
+        parsedWeatherData["currentConditions"]["winddir"],
       ]);
       aqiFunc(`${parsedWeatherData["currentConditions"]["aqius"]}`);
       descFunc(`${parsedWeatherData["currentConditions"]["conditions"]}`);
@@ -149,6 +149,7 @@ function App() {
           dropdownClose={dropdownClose}
           favorites={faves}
           onSetFavorites={setFaves}
+          mode={mode}
         />
 
         <SettingsButton onHandleSettingClick={setIsSettingsOpen} />

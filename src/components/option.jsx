@@ -6,6 +6,7 @@ export default function Option({
   onSetFavesList,
   onSetSelection,
   onSetInputValue,
+  mode,
 }) {
   function handleOptionClick(newItem) {
     let stop = false;
@@ -52,7 +53,7 @@ export default function Option({
   }
   return (
     <div
-      className="option"
+      className={mode == "day" ? "option-day" : "option-night"}
       onClick={() => {
         handleOptionClick(loc);
         onSetSelection(loc.split(" | ")[0]);

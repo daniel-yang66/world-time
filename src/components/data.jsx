@@ -25,7 +25,7 @@ export default function Data({
   const [time, setTime] = useState("");
   const [condition, setCondition] = useState("");
   const [temp, setTemp] = useState("");
-  const [wind, setWind] = useState(null);
+  const [wind, setWind] = useState("");
   const [aqi, setAqi] = useState("");
   const [descrip, setDescrip] = useState("");
   const [loading, setLoading] = useState("loading");
@@ -235,7 +235,7 @@ export default function Data({
               : Math.round((+temp - 32) * (5 / 9)) + "\xB0C"}
           </div>
         </div>
-        <div className="wind-info" style={{ marginTop: "-9px" }}>
+        <div className="wind-info" style={{ marginTop: "-7.5px" }}>
           <img
             src="/icons/wind.png"
             height="21"
