@@ -228,49 +228,51 @@ export default function Data({
         />
         <div className="clock-weather">
           <Clock tz={timezone} />
-          <div className="weather">
-            {icon}
-            {unit === "imperial"
-              ? temp + "\xB0F"
-              : Math.round((+temp - 32) * (5 / 9)) + "\xB0C"}
+          <div className="weather-wind">
+            <div className="weather">
+              {icon}
+              {unit === "imperial"
+                ? temp + "\xB0F"
+                : Math.round((+temp - 32) * (5 / 9)) + "\xB0C"}
+            </div>
+            <div className="wind-info">
+              <img
+                src="/icons/wind.png"
+                height="21"
+                width="21"
+                alt="icon"
+                style={{
+                  animationName: "spin",
+                  animationDuration:
+                    wind !== 0
+                      ? `${
+                          unit === "imperial"
+                            ? 0.5 * (15 / wind[0])
+                            : 0.5 * ((15 * 1.609) / wind[0])
+                        }s`
+                      : "",
+                  animationIterationCount: "infinite",
+                  animationTimingFunction: "linear",
+                }}
+              />
+              <div style={{ fontSize: "13px" }}>
+                {unit === "imperial"
+                  ? wind[0] + " mph"
+                  : Math.round(+wind[0] * 1.609) + " kph"}
+              </div>
+              <img
+                src="/icons/arrow.png"
+                height="19"
+                width="19"
+                alt="arrow"
+                style={{
+                  transform: wind[1]
+                    ? `rotate(${toFrom === "to" ? wind[1] - 180 : wind[1]}deg)`
+                    : "hidden",
+                }}
+              />
+            </div>
           </div>
-        </div>
-        <div className="wind-info" style={{ marginTop: "-7.5px" }}>
-          <img
-            src="/icons/wind.png"
-            height="21"
-            width="21"
-            alt="icon"
-            style={{
-              animationName: "spin",
-              animationDuration:
-                wind !== 0
-                  ? `${
-                      unit === "imperial"
-                        ? 0.5 * (15 / wind[0])
-                        : 0.5 * ((15 * 1.609) / wind[0])
-                    }s`
-                  : "",
-              animationIterationCount: "infinite",
-              animationTimingFunction: "linear",
-            }}
-          />
-          <div style={{ fontSize: "13px" }}>
-            {unit === "imperial"
-              ? wind[0] + " mph"
-              : Math.round(+wind[0] * 1.609) + " kph"}
-          </div>
-          <img
-            src="/icons/arrow.png"
-            height="19"
-            width="19"
-            alt="arrow"
-            style={{
-              transform: wind[1]
-                ? `rotate(${toFrom === "to" ? wind[1] - 180 : wind[1]}deg)`
-                : "hidden",
-            }}
-          />
         </div>
 
         <div className="digital-clock">{time ? time : "--:--"}</div>

@@ -280,6 +280,11 @@ h2 {
   display: flex;
   gap: 0.3vw;
 }
+.weather-wind {
+  display: grid;
+  justify-items: center;
+  margin-top: 4px;
+}
 
 .digital-clock {
   font-size: 90%;
