@@ -7,6 +7,19 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+  height: 6px;
+  background-color: oklch(54.6% 0.245 262.881);
+  border-radius: 25px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: oklch(80.9% 0.105 251.813);
+  border-radius: 25px;
+  margin-top: 4px;
+}
+
 .hidden {
   display: none;
 }
