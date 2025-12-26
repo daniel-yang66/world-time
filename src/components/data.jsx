@@ -61,7 +61,7 @@ export default function Data({
     const interval = setInterval(() => {
       if (!timezone) return;
       timeConversion(timezone, setTime);
-      if ((Date.now() - lastUpdate.current) / 1000 >= 15) {
+      if ((Date.now() - lastUpdate.current) / 1000 >= 1200) {
         setTrigger((prevTrigger) => !prevTrigger);
         lastUpdate.current = Date.now();
       }
