@@ -179,8 +179,12 @@ function App() {
           const data = await fetchWeather(fave[2], fave[3], fave[0], fave[1]);
           await new Promise((r) => setTimeout(r, 300));
           weatherLst.push(data);
-          setWeather(weatherLst);
         }
+        weatherLst =
+          weatherLst.length > 0
+            ? weatherLst.sort((a, b) => a.city.localeCompare(b.city))
+            : weatherLst;
+        setWeather(weatherLst);
       } catch {
         alert("Failed to get weather data");
       } finally {
