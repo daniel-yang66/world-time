@@ -14,7 +14,7 @@ export default function Weather({ location, units, data, mode, dir }) {
   const [activeBtn, setActiveBtn] = useState("daily");
   const [interval, setTimeInterval] = useState("daily");
   const { ref, inView } = useInView({
-    threshold: 0.95,
+    threshold: 0.85,
     root: null,
   });
 
@@ -177,8 +177,8 @@ export default function Weather({ location, units, data, mode, dir }) {
           {activeForecast.map((data) => (
             <InView
               onChange={setInView}
-              threshold={1}
-              key={data["datetimeEpoch"]}
+              threshold={0.85}
+              key={`${data["datetimeEpoch"]}-${location}`}
             >
               {({ ref }) => {
                 return (

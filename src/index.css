@@ -29,6 +29,7 @@ body {
   margin: 0;
   font-family: sans-serif;
   font-weight: bold;
+  overflow: hidden;
 }
 
 .all-content {
@@ -100,6 +101,7 @@ h2 {
   border-radius: 10px;
   text-align: center;
   margin-top: 2.3vh;
+  font-weight: 600;
 }
 .units,
 .to-from {
@@ -395,12 +397,14 @@ h2 {
   justify-content: flex-start;
   overflow: auto;
   margin-top: -22vh;
+  height: 25vh;
+  padding: 5px;
 }
 
 .forecast-box {
   display: grid;
   width: 150px;
-  height: 24.4vh;
+  height: 97%;
   justify-items: center;
   align-items: center;
   padding-right: 0.3vw;
@@ -645,14 +649,4 @@ h2 {
 .credit-btn:hover,
 .settings-btn:hover {
   cursor: pointer;
-}
-/* Transparent track */
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Customize the thumb (scroll handle) */
-::-webkit-scrollbar-thumb {
-  background-color: rgba(100, 100, 100, 0.5); /* semi-transparent gray */
-  border-radius: 10px;
 }

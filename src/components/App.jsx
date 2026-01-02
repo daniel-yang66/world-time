@@ -26,6 +26,10 @@ function App() {
   const [mode, setMode] = useState("day");
   const [dropdownClose, setDropdownClose] = useState(true);
   const [toFrom, setToFrom] = useState("to");
+  const [loading, setLoading] = useState(false);
+  const [trigger, setTrigger] = useState(false);
+  const [weather, setWeather] = useState([]);
+  const lastUpdate = useRef(Date.now());
 
   useEffect(() => {
     try {
@@ -59,51 +63,38 @@ function App() {
     }
   }
 
-  const fetchWeather = async (
-    lat,
-    lon,
-    condFunc,
-    tempFunc,
-    descFunc,
-    aqiFunc,
-    loadFunc,
-    windFunc,
-    city
-  ) => {
-    try {
-      loadFunc("loading");
-      const weatherData = await fetch(
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${lon}?key=${
-          import.meta.env.VITE_WEATHER_KEY
-        }&elements=%2Baqius`
-      );
-      const parsedWeatherData = await weatherData.json();
+  const fetchWeather = async (lat, lon, city, tz) => {
+    const weatherData = await fetch(
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${lon}?key=${
+        import.meta.env.VITE_WEATHER_KEY
+      }&elements=%2Baqius`
+    );
+    const parsedWeatherData = await weatherData.json();
 
-      condFunc(`${parsedWeatherData["currentConditions"]["icon"]}`);
-      tempFunc(`${Math.round(parsedWeatherData["currentConditions"]["temp"])}`);
-      windFunc([
+    allForecasts.current = allForecasts.current.filter((forecast) => {
+      return forecast.loc !== city;
+    });
+
+    allForecasts.current.push({
+      loc: city,
+      data: parsedWeatherData["days"],
+      tz: parsedWeatherData["timezone"],
+    });
+    setAllData(allForecasts.current);
+    // cache.current.push(city);
+
+    return {
+      condition: `${parsedWeatherData["currentConditions"]["icon"]}`,
+      temp: `${Math.round(parsedWeatherData["currentConditions"]["temp"])}`,
+      wind: [
         Math.round(parsedWeatherData["currentConditions"]["windspeed"]),
         parsedWeatherData["currentConditions"]["winddir"],
-      ]);
-      aqiFunc(`${parsedWeatherData["currentConditions"]["aqius"]}`);
-      descFunc(`${parsedWeatherData["currentConditions"]["conditions"]}`);
-
-      allForecasts.current = allForecasts.current.filter((forecast) => {
-        return forecast.loc !== city;
-      });
-
-      allForecasts.current.push({
-        loc: city,
-        data: parsedWeatherData["days"],
-        tz: parsedWeatherData["timezone"],
-      });
-      setAllData(allForecasts.current);
-
-      loadFunc("done");
-    } catch {
-      alert("Failed to get weather data.");
-      loadFunc("done");
-    }
+      ],
+      aqi: `${parsedWeatherData["currentConditions"]["aqius"]}`,
+      descrip: `${parsedWeatherData["currentConditions"]["conditions"]}`,
+      city: city,
+      tz: tz,
+    };
   };
 
   checkMode(mode);
@@ -133,6 +124,72 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if ((Date.now() - lastUpdate.current) / 1000 >= 1200) {
+        setTrigger((prevTrigger) => !prevTrigger);
+        lastUpdate.current = Date.now();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    async function fetchSequential() {
+      try {
+        setLoading("loading");
+        const filteredWeather = weather.filter((wx) => {
+          return faves.map((fave) => fave[0]).includes(wx.city);
+        });
+        let weatherLst =
+          filteredWeather.length === 0 ? [] : [...filteredWeather];
+
+        for (const fave of faves) {
+          if (!weather.map((wx) => wx.city).includes(fave[0])) {
+            const data = await fetchWeather(fave[2], fave[3], fave[0], fave[1]);
+            await new Promise((r) => setTimeout(r, 300));
+
+            weatherLst.push(data);
+          }
+        }
+        weatherLst =
+          weatherLst.length > 0
+            ? weatherLst.sort((a, b) => a.city.localeCompare(b.city))
+            : weatherLst;
+
+        setWeather(weatherLst);
+      } catch {
+        alert("Failed to get weather data");
+      } finally {
+        setLoading("done");
+      }
+    }
+    fetchSequential();
+  }, [faves]);
+
+  useEffect(() => {
+    setWeather([]);
+
+    async function fetchSequential() {
+      try {
+        setLoading("loading");
+        let weatherLst = [];
+        for (const fave of faves) {
+          const data = await fetchWeather(fave[2], fave[3], fave[0], fave[1]);
+          await new Promise((r) => setTimeout(r, 300));
+          weatherLst.push(data);
+          setWeather(weatherLst);
+        }
+      } catch {
+        alert("Failed to get weather data");
+      } finally {
+        setLoading("done");
+      }
+    }
+    fetchSequential();
+  }, [trigger]);
+
   return (
     <div
       className={
@@ -157,25 +214,28 @@ function App() {
 
       <div className="times-map">
         <Times>
-          {faves.length === 0 ? (
+          {weather.length === 0 ? (
             <h2 style={{ margin: "auto" }}>Add up to 6 Locations</h2>
           ) : (
-            faves.map((fave) => {
+            weather.map((data, i) => {
               return (
                 <Data
-                  timezone={fave[1]}
-                  city={fave[0]}
-                  key={fave}
-                  cityLat={fave[2]}
-                  cityLon={fave[3]}
+                  timezone={data.tz}
+                  city={data.city ? data.city : "--"}
+                  key={i}
+                  condition={data.condition}
+                  temp={data.temp ? data.temp : "--"}
+                  wind={data.wind ? data.wind : [0, 0]}
+                  aqi={data.aqi}
+                  descrip={data.descrip ? data.descrip : "--"}
                   faveList={faves}
                   onSetFavesList={setFaves}
                   onSetActive={setActiveMarker}
                   isActiveData={activeMarker}
                   unit={units}
-                  onFetchWeather={fetchWeather}
                   mode={mode}
                   toFrom={toFrom}
+                  loading={loading}
                 />
               );
             })

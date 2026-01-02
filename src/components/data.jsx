@@ -11,26 +11,23 @@ dayjs.extend(utc);
 export default function Data({
   timezone,
   city,
-  cityLat,
-  cityLon,
+
   faveList,
   onSetFavesList,
   onSetActive,
   isActiveData,
   unit,
-  onFetchWeather,
+  condition,
+  temp,
+  wind,
+  aqi,
+  descrip,
+
   mode,
   toFrom,
+  loading,
 }) {
   const [time, setTime] = useState("");
-  const [condition, setCondition] = useState("");
-  const [temp, setTemp] = useState("");
-  const [wind, setWind] = useState("");
-  const [aqi, setAqi] = useState("");
-  const [descrip, setDescrip] = useState("");
-  const [loading, setLoading] = useState("loading");
-  const [trigger, setTrigger] = useState(false);
-  const lastUpdate = useRef(Date.now());
 
   const daysOfweek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -44,27 +41,9 @@ export default function Data({
   };
 
   useEffect(() => {
-    onFetchWeather(
-      cityLat,
-      cityLon,
-      setCondition,
-      setTemp,
-      setDescrip,
-      setAqi,
-      setLoading,
-      setWind,
-      city
-    );
-  }, [city, trigger]);
-
-  useEffect(() => {
     const interval = setInterval(() => {
       if (!timezone) return;
       timeConversion(timezone, setTime);
-      if ((Date.now() - lastUpdate.current) / 1000 >= 1200) {
-        setTrigger((prevTrigger) => !prevTrigger);
-        lastUpdate.current = Date.now();
-      }
     }, 1000);
 
     return () => clearInterval(interval);
