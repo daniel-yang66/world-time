@@ -32,10 +32,10 @@ export default function Data({
   const daysOfweek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const timeConversion = function (tz, func) {
-    const hour = String(dayjs().tz(tz).$H).padStart(2, "0");
-    const min = String(dayjs().tz(tz).$m).padStart(2, "0");
-
-    const day = dayjs().tz(tz).$W;
+    const now = dayjs().tz(tz);
+    const hour = String(now.hour()).padStart(2, "0");
+    const min = String(now.minute()).padStart(2, "0");
+    const day = now.day();
 
     func(`${hour}:${min} | ${daysOfweek[day]}`);
   };
@@ -183,8 +183,8 @@ export default function Data({
               ? `city-data day-data active-city`
               : `city-data day-data`
             : isActiveData === city
-            ? `city-data night-data active-city`
-            : `city-data night-data`
+              ? `city-data night-data active-city`
+              : `city-data night-data`
         }
         onClick={(e) => {
           if (e.target.innerHTML !== "X") {

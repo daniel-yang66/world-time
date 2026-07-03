@@ -67,7 +67,7 @@ function App() {
     const weatherData = await fetch(
       `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${lon}?key=${
         import.meta.env.VITE_WEATHER_KEY
-      }&elements=%2Baqius`
+      }&elements=%2Baqius`,
     );
     const parsedWeatherData = await weatherData.json();
 
@@ -81,7 +81,6 @@ function App() {
       tz: parsedWeatherData["timezone"],
     });
     setAllData(allForecasts.current);
-    // cache.current.push(city);
 
     return {
       condition: `${parsedWeatherData["currentConditions"]["icon"]}`,
@@ -97,12 +96,11 @@ function App() {
     };
   };
 
-  checkMode(mode);
   function checkMode(curMode) {
     let newMode, night;
 
     const curTime = `${String(new Date().getHours()).padStart(2, "0")}:${String(
-      new Date().getMinutes()
+      new Date().getMinutes(),
     ).padStart(2, "0")}`;
 
     if (nightSettings[0] > nightSettings[1]) {
@@ -120,9 +118,11 @@ function App() {
   }
 
   useEffect(() => {
+    checkMode(mode);
+
     const interval = setInterval(() => checkMode(mode), 20000);
     return () => clearInterval(interval);
-  }, []);
+  }, [mode, nightSettings]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -135,72 +135,48 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    async function fetchSequential() {
-      try {
-        setLoading("loading");
-        const filteredWeather = weather.filter((wx) => {
-          return faves.map((fave) => fave[0]).includes(wx.city);
-        });
-        let weatherLst =
-          filteredWeather.length === 0 ? [] : [...filteredWeather];
+  async function fetchSequential(favorites, existing = []) {
+    setLoading("loading");
 
-        for (const fave of faves) {
-          if (!weather.map((wx) => wx.city).includes(fave[0])) {
-            const data = await fetchWeather(fave[2], fave[3], fave[0], fave[1]);
-            await new Promise((r) => setTimeout(r, 300));
+    try {
+      let weatherLst = [...existing];
 
-            weatherLst.push(data);
-          }
-        }
-        weatherLst =
-          weatherLst.length > 0
-            ? weatherLst.sort((a, b) => a.city.localeCompare(b.city))
-            : weatherLst;
+      for (const fave of favorites) {
+        const data = await fetchWeather(fave[2], fave[3], fave[0], fave[1]);
+        await new Promise((r) => setTimeout(r, 300));
 
-        setWeather(weatherLst);
-      } catch {
-        alert("Failed to get weather data");
-      } finally {
-        setLoading("done");
+        weatherLst.push(data);
       }
+      weatherLst =
+        weatherLst.length > 0
+          ? weatherLst.sort((a, b) => a.city.localeCompare(b.city))
+          : weatherLst;
+
+      setWeather(weatherLst);
+    } catch {
+      alert("Failed to get weather data");
+    } finally {
+      setLoading("done");
     }
-    fetchSequential();
+  }
+
+  useEffect(() => {
+    const filteredWeather = weather.filter((wx) => {
+      return faves.map((fave) => fave[0]).includes(wx.city);
+    });
+    const noWeather = faves.filter((fave) => {
+      return !weather.map((wx) => wx.city).includes(fave[0]);
+    });
+    fetchSequential(noWeather, filteredWeather);
   }, [faves]);
 
   useEffect(() => {
     setWeather([]);
-
-    async function fetchSequential() {
-      try {
-        setLoading("loading");
-        let weatherLst = [];
-        for (const fave of faves) {
-          const data = await fetchWeather(fave[2], fave[3], fave[0], fave[1]);
-          await new Promise((r) => setTimeout(r, 300));
-          weatherLst.push(data);
-        }
-        weatherLst =
-          weatherLst.length > 0
-            ? weatherLst.sort((a, b) => a.city.localeCompare(b.city))
-            : weatherLst;
-        setWeather(weatherLst);
-      } catch {
-        alert("Failed to get weather data");
-      } finally {
-        setLoading("done");
-      }
-    }
-    fetchSequential();
+    fetchSequential(faves);
   }, [trigger]);
 
   return (
-    <div
-      className={
-        mode === "day" ? `all-content ${mode}-bg` : `all-content ${mode}-bg`
-      }
-      onClick={handleGlobalClick}
-    >
+    <div className={`all-content ${mode}-bg`} onClick={handleGlobalClick}>
       <TopArea mode={mode}>
         <Title />
 
@@ -226,7 +202,7 @@ function App() {
                 <Data
                   timezone={data.tz}
                   city={data.city ? data.city : "--"}
-                  key={i}
+                  key={data.city}
                   condition={data.condition}
                   temp={data.temp ? data.temp : "--"}
                   wind={data.wind ? data.wind : [0, 0]}

@@ -1,6 +1,7 @@
 import tz_lookup from "tz-lookup";
 
 export default function Option({
+  order,
   loc,
   favesList,
   onSetFavesList,
@@ -26,7 +27,7 @@ export default function Option({
         newItem.split(" | ")[0],
         tz_lookup(
           newItem.split(" | ")[1].split(",")[0],
-          newItem.split(" | ")[1].split(",")[1]
+          newItem.split(" | ")[1].split(",")[1],
         ),
         newItem.split(" | ")[1].split(",")[0],
         newItem.split(" | ")[1].split(",")[1],
@@ -41,19 +42,23 @@ export default function Option({
           newItem.split(" | ")[0],
           tz_lookup(
             newItem.split(" | ")[1].split(",")[0],
-            newItem.split(" | ")[1].split(",")[1]
+            newItem.split(" | ")[1].split(",")[1],
           ),
           newItem.split(" | ")[1].split(",")[0],
           newItem.split(" | ")[1].split(",")[1],
         ],
 
         ...(favesList.length >= 6 ? favesList.pop() : favesList),
-      ])
+      ]),
     );
   }
   return (
     <div
-      className={mode == "day" ? "option-day" : "option-night"}
+      className={
+        mode === "day"
+          ? `option-day ${order ? `option-${order}` : ""}`
+          : `option-night ${order ? `option-${order}` : ""}`
+      }
       onClick={() => {
         handleOptionClick(loc);
         onSetSelection(loc.split(" | ")[0]);

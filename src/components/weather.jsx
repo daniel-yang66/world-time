@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useInView, InView } from "react-intersection-observer";
 import Forecast from "./forecast";
 import dayjs from "dayjs";
@@ -11,7 +11,6 @@ export default function Weather({ location, units, data, mode, dir }) {
   const [dayForecast, setDayForecast] = useState([]);
   const [hourlyForecast, setHourlyForecast] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [activeBtn, setActiveBtn] = useState("daily");
   const [interval, setTimeInterval] = useState("daily");
   const { ref, inView } = useInView({
     threshold: 0.85,
@@ -45,6 +44,15 @@ export default function Weather({ location, units, data, mode, dir }) {
     }
   };
 
+  const formatDay = (dateStr) => {
+    const d = new Date(dateStr);
+    return `${daysofWeek[d.getDay()]} | ${months[d.getMonth()]} ${d.getDate()}`;
+  };
+  const formatHour = (dateStr) => {
+    const d = new Date(dateStr);
+    return `${daysofWeek[d.getDay()]} | ${months[d.getMonth()]} ${d.getDate()}`;
+  };
+
   const fetchWeather = () => {
     try {
       if (fcastOfInterest.length === 0) return;
@@ -61,29 +69,17 @@ export default function Weather({ location, units, data, mode, dir }) {
           hourlyData.push(hour);
         });
       });
+      const now = dayjs().tz(tzID);
 
       const hourlyForecastSlice = hourlyData.filter((hour) => {
-        return (
-          hour["wholeTime"] >
-          `${dayjs().tz(tzID).$y}-${String(
-            Number(dayjs().tz(tzID).$M) + 1
-          ).padStart(2, "0")}-${String(dayjs().tz(tzID).$D).padStart(
-            2,
-            "0"
-          )} ${String(dayjs().tz(tzID).$H).padStart(2, "0")}:00:00`
-        );
+        return hour["wholeTime"] > now.format("YYYY-MM-DD HH:00:00");
       });
       setHourlyForecast(hourlyForecastSlice);
 
       const dailyData = parsedWeatherData;
 
       const dayForecastSlice = dailyData.filter((day) => {
-        return (
-          day["datetime"] >=
-          `${dayjs().tz(tzID).$y}-${String(
-            Number(dayjs().tz(tzID).$M) + 1
-          ).padStart(2, "0")}-${String(dayjs().tz(tzID).$D).padStart(2, "0")}`
-        );
+        return day["datetime"] >= now.format("YYYY-MM-DD");
       });
       setDayForecast(dayForecastSlice);
 
@@ -94,7 +90,7 @@ export default function Weather({ location, units, data, mode, dir }) {
     }
   };
 
-  useMemo(() => {
+  useEffect(() => {
     if (!location) return;
     fetchWeather();
   }, [location, data]);
@@ -143,12 +139,11 @@ export default function Weather({ location, units, data, mode, dir }) {
         <div className="daily-hourly-buttons">
           <button
             className={
-              activeBtn === "daily"
+              interval === "daily"
                 ? "daily-button active-day-hour"
                 : "daily-button"
             }
             onClick={() => {
-              setActiveBtn("daily");
               setTimeInterval("daily");
             }}
           >
@@ -156,12 +151,11 @@ export default function Weather({ location, units, data, mode, dir }) {
           </button>
           <button
             className={
-              activeBtn === "hourly"
+              interval === "hourly"
                 ? "hourly-button active-day-hour"
                 : "hourly-button"
             }
             onClick={() => {
-              setActiveBtn("hourly");
               setTimeInterval("hourly");
             }}
           >
@@ -186,26 +180,8 @@ export default function Weather({ location, units, data, mode, dir }) {
                     ref={ref}
                     id={
                       interval === "hourly"
-                        ? `${
-                            daysofWeek[
-                              new Date(`${data["wholeTime"]}`).getDay()
-                            ]
-                          } | ${
-                            months[new Date(`${data["wholeTime"]}`).getMonth()]
-                          } ${new Date(`${data["wholeTime"]}`).getDate()}`
-                        : `${
-                            daysofWeek[
-                              new Date(`${data["datetime"]} 00:00:00`).getDay()
-                            ]
-                          } | ${
-                            months[
-                              new Date(
-                                `${data["datetime"]} 00:00:00`
-                              ).getMonth()
-                            ]
-                          } ${new Date(
-                            `${data["datetime"]} 00:00:00`
-                          ).getDate()}`
+                        ? formatDay(data["wholeTime"])
+                        : formatDay(`${data["datetime"]} 00:00:00`)
                     }
                   >
                     <Forecast
@@ -213,22 +189,8 @@ export default function Weather({ location, units, data, mode, dir }) {
                       unit={units}
                       day={
                         interval === "hourly"
-                          ? `${data["wholeTime"]}`
-                          : `${
-                              daysofWeek[
-                                new Date(
-                                  `${data["datetime"]} 00:00:00`
-                                ).getDay()
-                              ]
-                            } | ${
-                              months[
-                                new Date(
-                                  `${data["datetime"]} 00:00:00`
-                                ).getMonth()
-                              ]
-                            } ${new Date(
-                              `${data["datetime"]} 00:00:00`
-                            ).getDate()}`
+                          ? data["wholeTime"]
+                          : formatDay(`${data["datetime"]} 00:00:00`)
                       }
                       precip={
                         units === "imperial"
@@ -251,17 +213,17 @@ export default function Weather({ location, units, data, mode, dir }) {
                           ? units === "imperial"
                             ? `${Math.round(data["temp"])}\xB0F`
                             : `${Math.round(
-                                (data["temp"] - 32) * (5 / 9)
+                                (data["temp"] - 32) * (5 / 9),
                               )}\xB0C`
                           : units === "imperial"
-                          ? `Hi: ${Math.round(
-                              data["tempmax"]
-                            )}\xB0F,Lo: ${Math.round(data["tempmin"])}\xB0F`
-                          : `Hi: ${Math.round(
-                              (data["tempmax"] - 32) * (5 / 9)
-                            )}\xB0C,Lo: ${Math.round(
-                              (data["tempmin"] - 32) * (5 / 9)
-                            )}\xB0C`
+                            ? `Hi: ${Math.round(
+                                data["tempmax"],
+                              )}\xB0F,Lo: ${Math.round(data["tempmin"])}\xB0F`
+                            : `Hi: ${Math.round(
+                                (data["tempmax"] - 32) * (5 / 9),
+                              )}\xB0C,Lo: ${Math.round(
+                                (data["tempmin"] - 32) * (5 / 9),
+                              )}\xB0C`
                       }
                       wind={
                         units === "imperial"

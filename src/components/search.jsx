@@ -16,7 +16,7 @@ export default function Search({
     const fetchedData = await fetch(
       `https://api.mapbox.com/search/geocode/v6/forward?q=${text}&types=place,district,neighborhood&language=en&access_token=${
         import.meta.env.VITE_TOKEN
-      }`
+      }`,
     );
 
     const results = await fetchedData.json();
@@ -33,7 +33,7 @@ export default function Search({
             : location["properties"]["context"]["country"]["country_code"]
         } | ${location["geometry"]["coordinates"][1]},${
           location["geometry"]["coordinates"][0]
-        }`
+        }`,
       );
     });
     if (placesTemp.length !== 0) {
@@ -72,13 +72,22 @@ export default function Search({
           dropdownClose === true || options.length === 0
             ? "hidden"
             : mode === "day"
-            ? "dropdown"
-            : "dropdown-night"
+              ? "dropdown"
+              : "dropdown-night"
         }
       >
-        {[...new Set(options)].map((opt) => {
+        {[...new Set(options)].map((opt, i) => {
           return (
             <Option
+              order={
+                [...new Set(options)].length !== 1
+                  ? i === 0 || i === [...new Set(options)].length - 1
+                    ? i === 0
+                      ? "first"
+                      : "last"
+                    : null
+                  : "only"
+              }
               loc={opt}
               favesList={favorites}
               onSetFavesList={onSetFavorites}

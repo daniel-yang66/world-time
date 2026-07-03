@@ -5,11 +5,12 @@ dayjs.extend(timezone);
 
 export default function Clock({ tz }) {
   const setClock = function (tz, hfunc, mfunc, sfunc) {
-    const hours = dayjs().tz(tz).$H;
+    const now = dayjs().tz(tz);
+    const hours = now.hour();
 
-    const minutes = dayjs().tz(tz).$m;
+    const minutes = now.minute();
 
-    const seconds = new Date().getSeconds();
+    const seconds = now.second();
 
     hfunc(hours * 30 + minutes / 2);
     mfunc(minutes * 6 + seconds / 10);
@@ -27,8 +28,28 @@ export default function Clock({ tz }) {
     return () => clearInterval(interval);
   }, [tz]);
 
+  const ticks = [];
+  for (let i = 0; i < 12; i++) {
+    if (i % 3 === 0) continue;
+    ticks.push(
+      <div
+        key={i}
+        className="tick-container"
+        style={{ transform: `rotate(${i * 30}deg)` }}
+      >
+        <div className="tick-mark" />
+      </div>,
+    );
+  }
+
   return (
     <div className="clock">
+      {ticks}
+      <span className="clock-num clock-12">12</span>
+      <span className="clock-num clock-3">3</span>
+      <span className="clock-num clock-6">6</span>
+      <span className="clock-num clock-9">9</span>
+
       <div
         className="hour"
         style={

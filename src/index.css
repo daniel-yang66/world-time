@@ -24,18 +24,21 @@
   display: none;
 }
 
+html,
 body {
   padding: 0;
   margin: 0;
   font-family: sans-serif;
   font-weight: bold;
   overflow: hidden;
+  height: 100vh;
+  width: 100vw;
 }
 
 .all-content {
   display: grid;
-  height: 100vh;
-  width: 100vw;
+  width: 100%;
+  height: 100%;
   justify-items: center;
   position: relative;
 }
@@ -117,11 +120,12 @@ h2 {
 }
 
 .dropdown {
-  background-color: #0096ff;
+  background-color: #2676ee;
   width: 100%;
   display: grid;
   row-gap: 1vh;
   margin-top: 3%;
+  border-radius: 20px;
 }
 .dropdown-night {
   background-color: #0f52ba;
@@ -129,20 +133,39 @@ h2 {
   display: grid;
   row-gap: 1vh;
   margin-top: 3%;
+  border-radius: 20px;
 }
-.option {
+.option-day {
   width: 100%;
   color: black;
-  font-size: 120%;
+  font-size: 100%;
   height: 3vh;
+  display: grid;
+  justify-items: center;
+}
+.option-only {
+  border: transparent;
+  border-radius: 20px;
+}
+.option-first {
+  border: transparent;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+.option-last {
+  border: transparent;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 .option-night {
   width: 100%;
   color: lightgray;
   font-size: 120%;
   height: 3vh;
+  display: grid;
+  justify-items: center;
 }
-.option:hover {
+.option-day:hover {
   cursor: pointer;
   background-color: lightgray;
 }
@@ -241,8 +264,8 @@ h2 {
 }
 .clock {
   position: relative;
-  height: 56px;
-  width: 56px;
+  height: 58px;
+  width: 58px;
   background-size: 100%;
   border-radius: 50%;
   border: rgb(57, 54, 54) solid 4px;
@@ -263,7 +286,7 @@ h2 {
   height: 30%;
   top: 19%;
   left: 46%;
-  background-color: yellow;
+  background-color: oklch(80.9% 0.105 251.813);
 }
 
 .minute {
@@ -271,7 +294,7 @@ h2 {
   height: 40%;
   top: 8.5%;
   left: 45.5%;
-  background: yellow;
+  background: oklch(80.9% 0.105 251.813);
 }
 
 .second {
@@ -279,11 +302,61 @@ h2 {
   height: 46%;
   top: 6.6%;
   left: 47%;
-  background-color: red;
+  background-color: oklch(76.5% 0.177 163.223);
   animation-name: spin;
 }
+
+.tick-container {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 0;
+  height: 50%;
+  transform-origin: bottom;
+}
+.tick-mark {
+  position: absolute;
+  top: 3px;
+  left: -0.75px;
+  width: 1.5px;
+  height: 5px;
+  background-color: oklch(88.2% 0.059 254.128);
+  border-radius: 1px;
+}
+
+.clock-num {
+  position: absolute;
+  font-size: 10px;
+  color: oklch(70.7% 0.165 254.624);
+  font-weight: bold;
+  z-index: 1;
+  pointer-events: none;
+  line-height: 1;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+.clock-12 {
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.clock-3 {
+  right: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.clock-6 {
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.clock-9 {
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .dot {
-  background-color: orange;
+  background-color: oklch(54.6% 0.245 262.881);
   border-radius: 50%;
   left: 43%;
   top: 44%;
